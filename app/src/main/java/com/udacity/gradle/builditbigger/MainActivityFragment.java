@@ -1,13 +1,14 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Intent;
 import android.example.com.javajokelibrary.MyJokes;
+import android.example.com.jokelibrary.DisplayJokeActivity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -17,6 +18,8 @@ import com.google.android.gms.ads.AdView;
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment implements View.OnClickListener {
+
+    MyJokes myJoker = new MyJokes();
 
     public MainActivityFragment() {
     }
@@ -45,8 +48,15 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tellJoke:
-                MyJokes myJoker = new MyJokes();
-                Toast.makeText(getContext(), myJoker.getJoke(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), myJoker.getJoke(), Toast.LENGTH_LONG).show();
+                passJoke();
         }
+    }
+
+    public void passJoke() {
+        Intent intent = new Intent(getContext(), DisplayJokeActivity.class);
+        String result = myJoker.getJoke();
+        intent.putExtra("jokes", result);
+        startActivity(intent);
     }
 }

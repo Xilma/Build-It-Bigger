@@ -48,7 +48,9 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tellJoke:
+                //Step 1
                 //Toast.makeText(getContext(), myJoker.getJoke(), Toast.LENGTH_LONG).show();
+                //Step 2
                 passJoke();
         }
     }

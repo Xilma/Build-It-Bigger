@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Context;
 import android.content.Intent;
 import android.example.com.javajokelibrary.MyJokes;
 import android.example.com.jokelibrary.DisplayJokeActivity;
@@ -17,7 +18,7 @@ import com.google.android.gms.ads.AdView;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements View.OnClickListener {
+public class MainActivityFragment extends Fragment implements EndpointsAsyncTask.mCallback, View.OnClickListener {
 
     MyJokes myJoker = new MyJokes();
 
@@ -51,14 +52,27 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
                 //Step 1
                 //Toast.makeText(getContext(), myJoker.getJoke(), Toast.LENGTH_LONG).show();
                 //Step 2
-                passJoke();
+                getJokeFromTask();
         }
     }
+
+    public void getJokeFromTask() {
+        Context context = getActivity();
+        new EndpointsAsyncTask(this).execute(context);
+    }
+
 
     public void passJoke() {
         Intent intent = new Intent(getContext(), DisplayJokeActivity.class);
         String result = myJoker.getJoke();
         intent.putExtra("jokes", result);
         startActivity(intent);
+    }
+
+    @Override
+    public void onCallbackResult(String result) {
+        Intent sendIntent = new Intent(getActivity(), DisplayJokeActivity.class);
+        sendIntent.putExtra("jokes", result);
+        startActivity(sendIntent);
     }
 }

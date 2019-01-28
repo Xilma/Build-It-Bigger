@@ -1,5 +1,7 @@
 package com.udacity.gradle.builditbigger.backend;
 
+import android.example.com.javajokelibrary.MyJokes;
+
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
@@ -23,6 +25,18 @@ public class MyEndpoint {
     public MyBean sayHi(@Named("name") String name) {
         MyBean response = new MyBean();
         response.setData("Hi, " + name);
+
+        return response;
+    }
+
+    /*
+     * an endpoint method to grab a joke from the java joke telling library
+     */
+    @ApiMethod(name = "getJoke")
+    public MyBean getJoke() {
+        MyBean response = new MyBean();
+        MyJokes jokes = new MyJokes();
+        response.setData(jokes.getJoke());
 
         return response;
     }

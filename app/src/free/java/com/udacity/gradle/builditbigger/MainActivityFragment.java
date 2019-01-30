@@ -20,6 +20,8 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
 
     private InterstitialAd mInterstitialAd;
     private ProgressBar mProgressBar;
+    private Button jokeButton;
+
     public MainActivityFragment() {
     }
 
@@ -39,6 +41,7 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
             @Override
             public void onAdClosed() {
                 requestNewInterstitialAd();
+                jokeButton.setEnabled(false);
                 mProgressBar.setVisibility(View.VISIBLE);
                 getJokeFromTask();
             }
@@ -52,8 +55,8 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mProgressBar = (ProgressBar) root.findViewById(R.id.loading_spinner);
-        Button jokeButton = (Button) root.findViewById(R.id.joke_telling_button);
+        mProgressBar = root.findViewById(R.id.spinner);
+        jokeButton = root.findViewById(R.id.joke_button);
         jokeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,13 +64,14 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
                     mInterstitialAd.show();
                 } else {
                     //start AsyncTask to get the Joke
+                    jokeButton.setEnabled(false);
                     mProgressBar.setVisibility(View.VISIBLE);
                     getJokeFromTask();
                 }
             }
         });
 
-        AdView mAdView = (AdView) root.findViewById(R.id.adView);
+        AdView mAdView = root.findViewById(R.id.adView);
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
         // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
@@ -79,11 +83,11 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
     }
 
     public void onCallbackResult(String result) {
-        //retrievedJoke = result;
         Intent sendIntent = new Intent(getActivity(), DisplayJokeActivity.class);
         sendIntent.putExtra("jokes", result);
 
         mProgressBar.setVisibility(View.GONE);
+        jokeButton.setEnabled(true);
         startActivity(sendIntent);
     }
 

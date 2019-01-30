@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">JokeLibrary</string>
+    <string name="laughing_image">Laughing emoji</string>
 </resources>

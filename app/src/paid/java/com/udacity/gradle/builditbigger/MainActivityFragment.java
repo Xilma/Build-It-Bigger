@@ -17,6 +17,7 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
     MyJokes myJoker = new MyJokes();
 
     private ProgressBar mProgressBar;
+
     public MainActivityFragment() {
     }
 
@@ -25,8 +26,8 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mProgressBar = root.findViewById(R.id.loading_spinner);
-        Button jokeButton = root.findViewById(R.id.joke_telling_button);
+        mProgressBar = root.findViewById(R.id.spinner);
+        Button jokeButton = root.findViewById(R.id.joke_button);
         jokeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,10 +54,9 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
     }
 
     public void onCallbackResult(String result) {
-        //retrievedJoke = result;
         Intent sendIntent = new Intent(getActivity(), DisplayJokeActivity.class);
         sendIntent.putExtra("jokes", result);
-        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.GONE);
         startActivity(sendIntent);
     }
 }

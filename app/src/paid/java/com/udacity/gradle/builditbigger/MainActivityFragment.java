@@ -10,18 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
-
-/**
- * A placeholder fragment containing a simple view.
- */
-public class MainActivityFragment extends Fragment implements EndpointsAsyncTask.mCallback, View.OnClickListener {
+public class MainActivityFragment extends Fragment implements EndpointsAsyncTask.mCallback{
 
     MyJokes myJoker = new MyJokes();
 
+    private ProgressBar mProgressBar;
     public MainActivityFragment() {
     }
 
@@ -30,37 +25,25 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
-        AdView mAdView = root.findViewById(R.id.adView);
-        // Create an ad request. Check logcat output for the hashed device ID to
-        // get test ads on a physical device. e.g.
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        mAdView.loadAd(adRequest);
-
-        Button jokeButton = root.findViewById(R.id.tellJoke);
-        jokeButton.setOnClickListener(this);
+        mProgressBar = root.findViewById(R.id.loading_spinner);
+        Button jokeButton = root.findViewById(R.id.joke_telling_button);
+        jokeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //start AsyncTask to get the Joke
+                mProgressBar.setVisibility(View.VISIBLE);
+                getJokeFromTask();
+            }
+        });
 
         return root;
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tellJoke:
-                //Step 1
-                //Toast.makeText(getContext(), myJoker.getJoke(), Toast.LENGTH_LONG).show();
-                //Step 2
-                getJokeFromTask();
-        }
     }
 
     public void getJokeFromTask() {
         Context context = getActivity();
         new EndpointsAsyncTask(this).execute(context);
-    }
 
+    }
 
     public void passJoke() {
         Intent intent = new Intent(getContext(), DisplayJokeActivity.class);
@@ -69,10 +52,11 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
         startActivity(intent);
     }
 
-    @Override
     public void onCallbackResult(String result) {
+        //retrievedJoke = result;
         Intent sendIntent = new Intent(getActivity(), DisplayJokeActivity.class);
         sendIntent.putExtra("jokes", result);
+        mProgressBar.setVisibility(View.INVISIBLE);
         startActivity(sendIntent);
     }
 }

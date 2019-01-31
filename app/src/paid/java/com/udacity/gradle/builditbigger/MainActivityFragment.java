@@ -14,8 +14,6 @@ import android.widget.ProgressBar;
 
 public class MainActivityFragment extends Fragment implements EndpointsAsyncTask.mCallback{
 
-    MyJokes myJoker = new MyJokes();
-
     private ProgressBar mProgressBar;
 
     public MainActivityFragment() {
@@ -46,12 +44,13 @@ public class MainActivityFragment extends Fragment implements EndpointsAsyncTask
 
     }
 
+    /*
     public void passJoke() {
         Intent intent = new Intent(getContext(), DisplayJokeActivity.class);
         String result = myJoker.getJoke();
         intent.putExtra("jokes", result);
         startActivity(intent);
-    }
+    }*/
 
     public void onCallbackResult(String result) {
         Intent sendIntent = new Intent(getActivity(), DisplayJokeActivity.class);
